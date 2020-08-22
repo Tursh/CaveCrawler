@@ -1,0 +1,3 @@
+[submodule "CGE"]
+	path = CGE
+	url = http://github.com/tursh/CGE-Dev
