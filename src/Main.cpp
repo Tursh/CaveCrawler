@@ -7,7 +7,7 @@
 
 void init()
 {
-    CGE::initEngine("Sand Box Game", 1280, 720, false);
+    CGE::initEngine("Cave Crawler", 1280, 720, false);
     CGE::GUI::Text::TextRenderer::init("res/graphics/fonts/Archivo-Regular.ttf");
     CGE::Utils::TPSClock::init();
     CGE::State::StateManager::constructAndSetCurrentState<CC::PlayState>();

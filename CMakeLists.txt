@@ -15,7 +15,7 @@ add_subdirectory(CGE)
 
 include_directories(CGE/include)
 
-project(SandBoxGame)
+project(CaveCrawler)
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -41,7 +41,7 @@ if (NOT BUILD_SHARED_LIBS)
     endif ()
 endif ()
 
-add_executable(SandBoxGame
+add_executable(CaveCrawler
         src/Main.cpp
         src/States/PlayState.cpp
         src/World/World.cpp
@@ -51,6 +51,6 @@ add_executable(SandBoxGame
         src/World/Terrain/ChunkManager.cpp
         src/World/Terrain/WorldGenerator.cpp)
 
-add_custom_command(TARGET SandBoxGame PRE_BUILD
+add_custom_command(TARGET CaveCrawler PRE_BUILD
         COMMAND ${CMAKE_COMMAND} -E create_symlink
-        ${CMAKE_SOURCE_DIR}/res $<TARGET_FILE_DIR:SandBoxGame>/res)
+        ${CMAKE_SOURCE_DIR}/res $<TARGET_FILE_DIR:CaveCrawler>/res)
