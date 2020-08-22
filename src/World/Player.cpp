@@ -20,7 +20,7 @@
 
 #include "IO/Input.h"
 
-namespace SBG::Entities
+namespace CC::Entities
 {
     const glm::vec3 PLAYER_SIZE = {0.9f, 1.8f, 0.9f};
 

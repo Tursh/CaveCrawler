@@ -13,7 +13,7 @@
 
 using namespace CGE;
 
-namespace SBG
+namespace CC
 {
 
     void World::tick()

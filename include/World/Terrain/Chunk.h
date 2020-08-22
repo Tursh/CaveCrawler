@@ -9,7 +9,7 @@
 #include <Loader/Meshes/TexturedMesh.h>
 #include "Block.h"
 
-namespace SBG
+namespace CC
 {
 
     extern const int CHUNK_SIZE, SQUARED_CHUNK_SIZE, CUBED_CHUNK_SIZE;

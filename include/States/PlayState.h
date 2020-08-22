@@ -10,7 +10,7 @@
 #include <GUI/Panel.h>
 #include <GLFW/glfw3.h>
 
-namespace SBG
+namespace CC
 {
 
     class PlayState : public CGE::State::State

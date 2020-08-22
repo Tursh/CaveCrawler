@@ -11,7 +11,7 @@
 #include <glm/vec2.hpp>
 #include <Loader/Meshes/MeshBuilder.h>
 
-namespace SBG
+namespace CC
 {
 
     struct Block

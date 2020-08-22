@@ -10,7 +10,7 @@
 #include "World/Terrain/WorldGenerator.h"
 #include <World/World.h>
 
-namespace SBG
+namespace CC
 {
 
     const unsigned int MAX_WORLD_GENERATION_HEIGHT = 256;

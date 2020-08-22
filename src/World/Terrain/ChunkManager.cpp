@@ -12,7 +12,7 @@
 #include <Loader/RessourceManager.h>
 #include <IO/Window.h>
 
-namespace SBG
+namespace CC
 {
 
     std::shared_ptr<CGE::Loader::Texture> tex;

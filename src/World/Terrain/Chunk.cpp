@@ -9,7 +9,7 @@
 #include <glm/gtx/string_cast.hpp>
 #include <Loader/Meshes/MeshBuilder.h>
 
-namespace SBG
+namespace CC
 {
 
     const int CHUNK_SIZE = 16, SQUARED_CHUNK_SIZE = CHUNK_SIZE * CHUNK_SIZE, CUBED_CHUNK_SIZE =

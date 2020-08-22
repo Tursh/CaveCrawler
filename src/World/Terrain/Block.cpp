@@ -14,7 +14,7 @@
 
 using namespace CGE::Loader;
 
-namespace SBG
+namespace CC
 {
 
     namespace Blocks

@@ -6,7 +6,7 @@
 #include <GUI/GUIManager.h>
 #include "States/PlayState.h"
 
-namespace SBG
+namespace CC
 {
 
     PlayState::PlayState()

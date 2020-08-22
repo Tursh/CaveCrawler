@@ -14,7 +14,7 @@
 #include <Utils/PerlinNoise.h>
 #include <World/Player.h>
 
-namespace SBG
+namespace CC
 {
 
     class World

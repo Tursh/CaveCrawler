@@ -14,7 +14,7 @@
 #include <Utils/ThreadProcess.h>
 #include <Utils/PerlinNoise.h>
 
-namespace SBG
+namespace CC
 {
 
     class ChunkManager;

@@ -11,7 +11,7 @@
 #include "Chunk.h"
 #include "WorldGenerator.h"
 
-namespace SBG
+namespace CC
 {
 
 /*
@@ -22,7 +22,7 @@ namespace SBG
     class ChunkManager : public CGE::Utils::ThreadProcess
     {
 
-        SBG::Entities::Player *player_;
+        CC::Entities::Player *player_;
 
         std::map<int, std::map<int, std::map<int, Chunk *>>> &chunks_;
 
@@ -46,7 +46,7 @@ namespace SBG
         void run() override;
 
     public:
-        ChunkManager(SBG::Entities::Player *player,
+        ChunkManager(CC::Entities::Player *player,
                      World *world,
                      std::map<int, std::map<int, std::map<int, Chunk *>>> &chunks);
 
