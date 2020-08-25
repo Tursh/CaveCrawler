@@ -1,19 +1,16 @@
 //
 // Created by musique88 on 8/22/20.
 //
-
-#ifndef CAVECRAWLER_INVENTORY_H
-#define CAVECRAWLER_INVENTORY_H
 #pragma once
-
-#include "Spell.h"
 
 namespace CC
 {
+	static const int NUMBER_OF_ELEMENTS = 7;
 	class Inventory
 	{
 	public:
+		Inventory();
+		Inventory(int *elemental);
 		int elemental[NUMBER_OF_ELEMENTS];
 	};
 }
-#endif //CAVECRAWLER_INVENTORY_H

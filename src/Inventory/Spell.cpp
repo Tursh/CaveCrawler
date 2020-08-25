@@ -5,16 +5,18 @@
 #include "Spell.h"
 namespace CC
 {
-	bool Spell::use(Inventory *inventory)
+
+	bool Spell::use(int *inventory)
 	{
 
 	}
 
-	int Spell::canUse(Inventory inventory)
+	int Spell::canUse(int *inventory)
 	{
 		int numberOfTimesCraftable = -1;
 		int tempInventory[NUMBER_OF_ELEMENTS];
-		tempInventory = inventory.elemental;
+		for(int i = 0; i < NUMBER_OF_ELEMENTS; i++)
+			tempInventory[i] = inventory[i];
 
 		bool stillCraftable = true;
 		do{
@@ -26,6 +28,13 @@ namespace CC
 			++numberOfTimesCraftable;
 		} while (stillCraftable);
 		return numberOfTimesCraftable;
+	}
+
+	Spell::Spell(Element element, int *requirements)
+	{
+		this->element = element;
+		for (int i = 0; i < NUMBER_OF_ELEMENTS; i++)
+			this->requirements[i] = requirements[i];
 	}
 
 	Effect ElementRelationship::Relationship(Element attack, Element target)

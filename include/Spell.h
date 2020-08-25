@@ -1,17 +1,13 @@
 //
 // Created by musique88 on 8/22/20.
 //
-
-#ifndef CAVECRAWLER_SPELL_H
-#define CAVECRAWLER_SPELL_H
-
+#pragma once
 #include <vector>
-#include "Elemental.h"
 #include "Inventory.h"
 
 namespace CC
 {
-#define NUMBER_OF_ELEMENTS 7
+
 	enum Element
 	{
 		NEUTRAL, WATER, FIRE, NATURE, ELECTRICITY, AIR, ICE
@@ -34,16 +30,14 @@ namespace CC
 
 	class Spell
 	{
-	protected:
-		int requirements[NUMBER_OF_ELEMENTS] = {};
 	public:
+		Spell(Element element, int *requirements);
+
 		Element element = NEUTRAL;
 		//returns the number of times it can be used
-		int canUse(Inventory inventory);
-
+		int canUse(int *inventory);
+		int requirements[NUMBER_OF_ELEMENTS] = {};
 		//returns if the spell has been used successfully
-		bool use(Inventory* inventory);
+		bool use(int *inventory);
 	};
 }
-
-#endif //CAVECRAWLER_SPELL_H
