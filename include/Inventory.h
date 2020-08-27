@@ -3,14 +3,20 @@
 //
 #pragma once
 
+#include <array>
+
 namespace CC
 {
+	class Spell;
 	static const int NUMBER_OF_ELEMENTS = 7;
 	class Inventory
 	{
+		std::array<int, NUMBER_OF_ELEMENTS> elemental_;
 	public:
 		Inventory();
-		Inventory(int *elemental);
-		int elemental_[NUMBER_OF_ELEMENTS];
+		Inventory(std::array<int,NUMBER_OF_ELEMENTS> elemental);
+		void setElemental(std::array<int,NUMBER_OF_ELEMENTS> elemental);
+		void useSpell(Spell spell);
+		int& operator[] (int index);
 	};
 }

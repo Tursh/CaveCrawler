@@ -10,17 +10,23 @@ namespace CC
 
 	enum Element
 	{
-		NEUTRAL, WATER, FIRE, NATURE, ELECTRICITY, AIR, ICE
+		NEUTRAL_ELEMENT,
+		WATER_ELEMENT,
+		FIRE_ELEMENT,
+		NATURE_ELEMENT,
+		ELECTRICITY_ELEMENT,
+		AIR_ELEMENT,
+		ICE_ELEMENT
 	};
 
 	enum Effect
 	{
-		STRONG_HEAL,
-		HEAL,
-		IMMUNE,
-		WEAK,
-		NORMAL,
-		STRONG
+		STRONG_HEAL_EFFECT,
+		HEAL_EFFECT,
+		IMMUNE_EFFECT,
+		WEAK_EFFECT,
+		NORMAL_EFFECT,
+		STRONG_EFFECT
 	};
 
 	struct ElementRelationship
@@ -31,13 +37,13 @@ namespace CC
 	class Spell
 	{
 	public:
-		Spell(Element element, int *requirements);
+		Spell(Element element, std::array<int,NUMBER_OF_ELEMENTS> requirements);
 
-		Element element = NEUTRAL;
+		Element element = NEUTRAL_ELEMENT;
 		//returns the number of times it can be used
-		int canUse(int *inventory);
-		int requirements[NUMBER_OF_ELEMENTS] = {};
+		int canUse(Inventory inventory);
+		std::array<int, NUMBER_OF_ELEMENTS> requirements_ = {};
 		//returns if the spell has been used successfully
-		bool use(int *inventory);
+		bool use(Inventory *inventory);
 	};
 }

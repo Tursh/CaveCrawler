@@ -5,49 +5,50 @@
 #include "Spell.h"
 namespace CC
 {
+	static Effect table[NUMBER_OF_ELEMENTS][NUMBER_OF_ELEMENTS] = {
+			{NORMAL_EFFECT, WEAK_EFFECT,        WEAK_EFFECT,   NORMAL_EFFECT,      NORMAL_EFFECT, IMMUNE_EFFECT, NORMAL_EFFECT},
+			{NORMAL_EFFECT, HEAL_EFFECT,        IMMUNE_EFFECT, NORMAL_EFFECT,      STRONG_EFFECT, WEAK_EFFECT,   HEAL_EFFECT},
+			{NORMAL_EFFECT, STRONG_EFFECT,      IMMUNE_EFFECT, IMMUNE_EFFECT,      IMMUNE_EFFECT, HEAL_EFFECT,   WEAK_EFFECT},
+			{NORMAL_EFFECT, STRONG_HEAL_EFFECT, STRONG_EFFECT, STRONG_HEAL_EFFECT, STRONG_EFFECT, WEAK_EFFECT,   NORMAL_EFFECT},
+			{NORMAL_EFFECT, STRONG_HEAL_EFFECT, WEAK_EFFECT,   IMMUNE_EFFECT,      HEAL_EFFECT,   WEAK_EFFECT,   WEAK_EFFECT},
+			{NORMAL_EFFECT, STRONG_EFFECT,      STRONG_EFFECT, STRONG_EFFECT,      IMMUNE_EFFECT, WEAK_EFFECT,   IMMUNE_EFFECT},
+			{NORMAL_EFFECT, HEAL_EFFECT,        STRONG_EFFECT, NORMAL_EFFECT,      NORMAL_EFFECT, WEAK_EFFECT,   NORMAL_EFFECT}
+	};
 
-	bool Spell::use(int *inventory)
+	Spell::Spell(Element element, std::array<int,NUMBER_OF_ELEMENTS> requirements)
 	{
-
+		this->element = element;
+		requirements_.swap(requirements);
 	}
 
-	int Spell::canUse(int *inventory)
+	int Spell::canUse(Inventory inventory)
 	{
 		int numberOfTimesCraftable = -1;
-		int tempInventory[NUMBER_OF_ELEMENTS];
-		for(int i = 0; i < NUMBER_OF_ELEMENTS; i++)
-			tempInventory[i] = inventory[i];
-
 		bool stillCraftable = true;
 		do{
 			for (int i = 0; i < NUMBER_OF_ELEMENTS; i++)
 			{
-				tempInventory[i] -= requirements[i];
-				stillCraftable &= tempInventory[i] >= 0;
+				inventory[i] -= requirements_[i];
+				stillCraftable &= inventory[i] >= 0;
 			}
 			++numberOfTimesCraftable;
 		} while (stillCraftable);
 		return numberOfTimesCraftable;
 	}
 
-	Spell::Spell(Element element, int *requirements)
+	bool Spell::use(Inventory *inventory)
 	{
-		this->element = element;
-		for (int i = 0; i < NUMBER_OF_ELEMENTS; i++)
-			this->requirements[i] = requirements[i];
+		if (canUse(*inventory))
+		{
+			inventory->useSpell(*this);
+			return true;
+		}
+		else
+			return false;
 	}
 
 	Effect ElementRelationship::Relationship(Element attack, Element target)
 	{
-		Effect table[NUMBER_OF_ELEMENTS][NUMBER_OF_ELEMENTS] = {
-				{NORMAL,	WEAK,		WEAK,	NORMAL,		NORMAL,	IMMUNE,	NORMAL},
-				{NORMAL,	HEAL,		IMMUNE,	NORMAL,		STRONG,	WEAK,	HEAL},
-				{NORMAL,	STRONG,		IMMUNE,	IMMUNE,		IMMUNE,	HEAL,	WEAK},
-				{NORMAL,	STRONG_HEAL,STRONG,	STRONG_HEAL,STRONG,	WEAK,	NORMAL},
-				{NORMAL,	STRONG_HEAL,WEAK,	IMMUNE,		HEAL,	WEAK,	WEAK},
-				{NORMAL,	STRONG,		STRONG,	STRONG,		IMMUNE,	WEAK,	IMMUNE},
-				{NORMAL,	HEAL,		STRONG,	NORMAL,		NORMAL,	WEAK,	NORMAL}
-		};
 		return table[attack][target];
 	}
 }
