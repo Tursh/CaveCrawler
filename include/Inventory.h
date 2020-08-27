@@ -11,6 +11,6 @@ namespace CC
 	public:
 		Inventory();
 		Inventory(int *elemental);
-		int elemental[NUMBER_OF_ELEMENTS];
+		int elemental_[NUMBER_OF_ELEMENTS];
 	};
 }
