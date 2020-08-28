@@ -13,9 +13,9 @@ namespace CC
 		std::array<int, NUMBER_OF_ELEMENTS> elemental_;
 	public:
 		Inventory();
-		Inventory(std::array<int,NUMBER_OF_ELEMENTS> elemental);
+		explicit Inventory(std::array<int,NUMBER_OF_ELEMENTS> elemental);
 		void setElemental(std::array<int,NUMBER_OF_ELEMENTS> elemental);
-		void useSpell(Spell &spell);
+		void useSpell(const Spell &spell);
 		int& operator[] (int index);
 	};
 }

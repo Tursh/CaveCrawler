@@ -18,7 +18,7 @@ namespace CC
 
 	Spell::Spell(Element element, std::array<int,NUMBER_OF_ELEMENTS> requirements)
 	{
-		this->element_ = element;
+		element_ = element;
 		requirements_.swap(requirements);
 	}
 

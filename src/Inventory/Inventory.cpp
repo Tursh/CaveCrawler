@@ -26,7 +26,7 @@ namespace CC
 		return elemental_[index];
 	}
 
-	void Inventory::useSpell(Spell &spell)
+	void Inventory::useSpell(const Spell &spell)
 	{
 		for(int i = 0; i < NUMBER_OF_ELEMENTS; i++)
 			elemental_[i] -= spell.requirements_[i];
