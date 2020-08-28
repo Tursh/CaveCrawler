@@ -4,7 +4,6 @@
 
 #include <IO/Input.h>
 #include <GUI/GUIManager.h>
-#include <Inventory.h>
 #include "States/PlayState.h"
 
 namespace CC

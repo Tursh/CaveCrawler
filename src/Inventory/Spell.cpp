@@ -3,6 +3,7 @@
 //
 
 #include "Inventory/Spell.h"
+#include "Inventory/Inventory.h"
 namespace CC
 {
 	static Effect table[NUMBER_OF_ELEMENTS][NUMBER_OF_ELEMENTS] = {
@@ -17,7 +18,7 @@ namespace CC
 
 	Spell::Spell(Element element, std::array<int,NUMBER_OF_ELEMENTS> requirements)
 	{
-		this->element = element;
+		this->element_ = element;
 		requirements_.swap(requirements);
 	}
 
@@ -36,11 +37,11 @@ namespace CC
 		return numberOfTimesCraftable;
 	}
 
-	bool Spell::use(Inventory *inventory)
+	bool Spell::use(Inventory &inventory)
 	{
-		if (canUse(*inventory))
+		if (canUse(inventory))
 		{
-			inventory->useSpell(*this);
+			inventory.useSpell(*this);
 			return true;
 		}
 		else

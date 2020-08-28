@@ -4,7 +4,6 @@
 #include <thread>
 #include <State/StateManager.h>
 #include <GUI/Text/TextRenderer.h>
-#include "Spell.h"
 
 void init()
 {

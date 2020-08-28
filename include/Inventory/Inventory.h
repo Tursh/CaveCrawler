@@ -4,11 +4,10 @@
 #pragma once
 
 #include <array>
+#include "Spell.h"
 
 namespace CC
 {
-	class Spell;
-	static const int NUMBER_OF_ELEMENTS = 7;
 	class Inventory
 	{
 		std::array<int, NUMBER_OF_ELEMENTS> elemental_;
@@ -16,7 +15,7 @@ namespace CC
 		Inventory();
 		Inventory(std::array<int,NUMBER_OF_ELEMENTS> elemental);
 		void setElemental(std::array<int,NUMBER_OF_ELEMENTS> elemental);
-		void useSpell(Spell spell);
+		void useSpell(Spell &spell);
 		int& operator[] (int index);
 	};
 }

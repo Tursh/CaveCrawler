@@ -49,7 +49,9 @@ add_executable(CaveCrawler
         src/World/Terrain/Block.cpp
         src/World/Player.cpp
         src/World/Terrain/ChunkManager.cpp
-        src/World/Terrain/WorldGenerator.cpp src/Inventory/Inventory.cpp include/Inventory/Inventory.h src/Inventory/Spell.cpp include/Inventory/Spell.h)
+        src/World/Terrain/WorldGenerator.cpp
+        src/Inventory/Inventory.cpp
+        src/Inventory/Spell.cpp)
 
 add_custom_command(TARGET CaveCrawler PRE_BUILD
         COMMAND ${CMAKE_COMMAND} -E create_symlink
