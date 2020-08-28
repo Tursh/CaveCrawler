@@ -2,7 +2,7 @@
 // Created by musique88 on 8/22/20.
 //
 
-#include "Spell.h"
+#include "Inventory/Spell.h"
 namespace CC
 {
 	static Effect table[NUMBER_OF_ELEMENTS][NUMBER_OF_ELEMENTS] = {

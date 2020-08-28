@@ -2,8 +2,8 @@
 // Created by musique88 on 8/22/20.
 //
 
-#include <Spell.h>
-#include "Inventory.h"
+#include <Inventory/Spell.h>
+#include "Inventory/Inventory.h"
 
 namespace CC
 {
