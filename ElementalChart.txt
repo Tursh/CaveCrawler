@@ -1,0 +1,15 @@
+The shown correlations are the only damage possible
+If some relation happens and it is not shown here the target will be immune to the attack
+
+The number between the connections are multipliers
+Negative numbers heals the target
+
+| Target\Attack | Physical | Water       | Fire   | Leaf        | Electricity | Air    | Ice    |
+|---------------+----------+-------------+--------+-------------+-------------+--------+--------|
+| Physical      | Normal   | Weak        | Weak   | Normal      | Normal      | Immune | Normal |
+| Water         | Normal   | Heal        | Immune | Normal      | Strong      | Weak   | Heal   |
+| Fire          | Normal   | Strong      | Immune | Immune      | Immune      | Heal   | Weak   |
+| Leaf          | Normal   | Strong Heal | Strong | Strong Heal | Strong      | Weak   | Normal |
+| Electricity   | Normal   | Strong Heal | Weak   | Immune      | Heal        | Weak   | Weak   |
+| Air           | Normal   | Strong      | Strong | Strong      | Immune      | Weak   | Immune |
+| Ice           | Normal   | Heal        | Strong | Normal      | Normal      | Weak   | Normal |
