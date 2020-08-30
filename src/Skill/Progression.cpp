@@ -23,17 +23,19 @@ namespace CC
 //Leveling up adds one skillpoint to every skill
 	void Progression::levelUp()
 	{
-		level_++;
+		++level_;
+		for (int& i : skills_)
+			++i;
 	}
 
 	bool Progression::addXp(int xp)
 	{
 		xp_ += xp;
 		int neededXpToLevel = neededXpToLevelUp();
-		if (neededXpToLevel >= 0)
+		if (neededXpToLevel <= 0)
 		{
 			levelUp();
-			xp_ = neededXpToLevel;
+			xp_ = -neededXpToLevel;
 			return true;
 		}
 		return false;
@@ -41,17 +43,17 @@ namespace CC
 
 	int Progression::neededXpToLevelUp() const
 	{
-		return xp_ - neededXpFunction(level_);
+		return neededXpFunction(level_) - xp_;
 	}
 
-	void Progression::addSkillPoints(int skillPoints)
+	void Progression::addSkillPoints(int amount)
 	{
-		skillPoints_ += skillPoints;
+		skillPoints_ += amount;
 	}
 
-	void Progression::addPointToSkill(Skill skill, int amountOfSkillpoints)
+	void Progression::addPointToSkill(Skill skill, int amount)
 	{
-		skills_[(int)skill] += amountOfSkillpoints;
+		skills_[(int)skill] += amount;
 	}
 
 	void Progression::enemyKilled(int xp)
@@ -62,6 +64,6 @@ namespace CC
 
 	void Progression::resetSkills()
 	{
-		skills_ = std::array<int, NUMBER_OF_SKILLS>();
+		skills_.fill(0);
 	}
 }

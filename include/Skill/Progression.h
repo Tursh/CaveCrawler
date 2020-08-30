@@ -49,8 +49,8 @@ namespace CC
 		static const int neededXpFunction(int level);
 		int neededXpToLevelUp() const;
 		bool addXp(int xp);
-		void addSkillPoints(int skillPoints);
-		void addPointToSkill(Skill skill, int amountOfSkillpoints);
+		void addSkillPoints(int amount);
+		void addPointToSkill(Skill skill, int amount);
 		void enemyKilled(int xp);
 	};
 }
