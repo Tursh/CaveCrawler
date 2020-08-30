@@ -51,7 +51,8 @@ add_executable(CaveCrawler
         src/World/Terrain/ChunkManager.cpp
         src/World/Terrain/WorldGenerator.cpp
         src/Skill/Progression.cpp
-        )
+        src/Inventory/Inventory.cpp
+        src/Inventory/Spell.cpp)
 
 add_custom_command(TARGET CaveCrawler PRE_BUILD
         COMMAND ${CMAKE_COMMAND} -E create_symlink
