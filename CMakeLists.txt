@@ -50,6 +50,7 @@ add_executable(CaveCrawler
         src/World/Player.cpp
         src/World/Terrain/ChunkManager.cpp
         src/World/Terrain/WorldGenerator.cpp
+        src/Skill/Progression.cpp
         src/Inventory/Inventory.cpp
         src/Inventory/Spell.cpp)
 
