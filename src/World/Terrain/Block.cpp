@@ -40,6 +40,7 @@ namespace CC
 
         const Block AIR_BLOCK = {AIR, 0};
         const Block CLOUD_BLOCK = {CLOUD, 0};
+        const Block STONE_BLOCK = {STONE, 0};
 
         const float CUBE_SIZE = 1.0f;
 

@@ -43,7 +43,7 @@ namespace CC
 
         extern const short *TEX_ATLAS[];
 
-        extern const Block AIR_BLOCK, CLOUD_BLOCK;
+        extern const Block AIR_BLOCK, CLOUD_BLOCK, STONE_BLOCK;
 
         extern const float CUBE_SIZE;
 

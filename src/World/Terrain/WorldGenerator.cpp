@@ -16,6 +16,7 @@ namespace CC
     const unsigned int MAX_WORLD_GENERATION_HEIGHT = 256;
     const unsigned int CLOUD_CHUNK_HEIGHT = 8;
 
+
     WorldGenerator::WorldGenerator(World *world, ChunkManager &chunkManager)
             : world_(world), chunkManager_(chunkManager) {}
 
@@ -41,7 +42,9 @@ namespace CC
 
             //Create the block 3D matrix and fill it with air
             auto *blocks = new Block[CUBED_CHUNK_SIZE];
-            fillChunk(blocks, Blocks::AIR_BLOCK);
+            fillChunk(blocks, Blocks::STONE_BLOCK);
+
+
 
             auto *newChunk = new Chunk(blocks, world_, chunkPosition, false);
             world_->addChunk(newChunk);

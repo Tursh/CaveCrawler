@@ -4,6 +4,7 @@
 
 #include <IO/Input.h>
 #include <GUI/GUIManager.h>
+#include <World/Terrain/TunnelGenerator.h>
 #include "States/PlayState.h"
 
 namespace CC
@@ -24,8 +25,11 @@ namespace CC
         CGE::GUI::GUIManager::addComponent(pausePanel);
     }
 
+    CC::TunnelGenerator tunnelGenerator(glm::vec3(0));
+
     void PlayState::tick()
     {
+        tunnelGenerator.getNextTunnelHead();
         world.tick();
     }
 
