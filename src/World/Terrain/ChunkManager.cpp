@@ -20,22 +20,38 @@ namespace CC
     ChunkManager::ChunkManager(Entities::Player *player,
                                World *world,
                                std::map<int, std::map<int, std::map<int, Chunk *>>> &chunks)
-            : player_(player), chunks_(chunks), worldGenerator_(world, *this), world_(world)
+            : player_(player), chunks_(chunks), worldGenerator_(world, *this, tunnelBody_), world_(world),
+              tunnelGenerator_({0, 0, 0}, 4), tunnelBody_(new glm::ivec3[tunnelLength_])
     {
         tex = CGE::Loader::resManager::getTexture(1);
         CGE::Utils::TPSClock::init(2);
         CGE::Utils::TPSClock::setTPS(2, 2);
 
-        int diameter = radius_ * 2 + 1;
-        chunkCount_ = (int) pow(diameter, 3);
-        loaded = new bool[chunkCount_];
+        for (int i = 0; i < tunnelLength_; ++i)
+        {
+            tunnelBody_[i] = (tunnelGenerator_.getNextTunnelHead());
+            glm::ivec3 chunkPosition = World::getChunkPosition(tunnelBody_[i]);
+
+            //Add the chunk if isn't already going to be loaded
+            addChunkToLoad(chunkPosition);
+
+            glm::ivec3 positionInChunk = World::getPositionInChunk(tunnelBody_[i]);
+            //Check if the tunnel will touch other chunks
+            for (int axis = 0; axis < 3; ++axis)
+                if (positionInChunk[axis] < tunnelRadius_ && CHUNK_SIZE - tunnelRadius_ < positionInChunk[axis])
+                {
+                    glm::ivec3 neighbourChunk = chunkPosition;
+                    neighbourChunk[axis] += positionInChunk[axis] < tunnelRadius_ ? -1 : 1;
+                    //addChunkToLoad(neighbourChunk);
+                }
+        }
+
 
         worldGenerator_.start();
     }
 
     ChunkManager::~ChunkManager()
     {
-        delete[] loaded;
         worldGenerator_.stop();
     }
 
@@ -43,91 +59,13 @@ namespace CC
     {
         if (CGE::Utils::TPSClock::shouldTick(2))
         {
-            glm::ivec3 playerChunkPosition = World::getChunkPosition(player_->getPosition());
-
-            if (centerChunkPosition_ == playerChunkPosition)
-                return;
-
-            centerChunkPosition_ = playerChunkPosition;
-
-            //Create loaded array
-            int diameter = radius_ * 2 + 1;
-            for (int i = 0; i < chunkCount_; ++i)
-                loaded[i] = false;
-
-            auto chunks = chunks_;
-
-            for (auto &chunkMapMap : chunks)
-                for (auto &chunkMap : chunkMapMap.second)
-                    for (auto chunkPair : chunkMap.second)
-                    {
-                        //Get position relative to player
-                        Chunk *chunk = chunkPair.second;
-                        if (chunk == nullptr)
-                            continue;
-                        glm::ivec3 relativeChunkPosition = chunk->getChunkPosition() - centerChunkPosition_;
-
-                        //Remove chunk if too far from player
-                        glm::ivec3 absDelta = glm::abs(relativeChunkPosition);
-                        for (int axis = 0; axis < 3; ++axis)
-                            if (absDelta[axis] > radius_ + 2)
-                            {
-                                world_->deleteChunk(chunk);
-                                continue;
-                            }
-
-
-                        if (absDelta.x <= radius_ && absDelta.y <= radius_ && absDelta.z <= radius_)
-                        {
-                            relativeChunkPosition += radius_;
-                            int index = relativeChunkPosition.x +
-                                        diameter * (relativeChunkPosition.y + diameter * relativeChunkPosition.z);
-                            if (0 <= index && index < chunkCount_)
-                                loaded[index] = true;
-                        }
-                    }
-
-
-            chunkToLoad_.clear();
-
-            for (int i = radius_; i >= 0; --i)
-                for (int axis = 0; axis < 3; ++axis)
-                    for (int x = -i + (axis > 1); x <= i - (axis > 1); ++x)
-                        for (int y = -i + (axis > 0); y <= i - (axis > 0); ++y)
-                        {
-                            glm::ivec3 relativeChunkPosition(i);
-                            relativeChunkPosition[(axis + 1) % 3] = x;
-                            relativeChunkPosition[(axis + 2) % 3] = y;
-
-                            glm::ivec3 indexPosition = relativeChunkPosition + radius_;
-
-                            if (!loaded[indexPosition.x + diameter * (indexPosition.y + diameter * indexPosition.z)])
-                                chunkToLoad_.push_back(centerChunkPosition_ + relativeChunkPosition);
-                            if (relativeChunkPosition[axis] != 0)
-                            {
-                                relativeChunkPosition[axis] *= -1;
-                                indexPosition = relativeChunkPosition + radius_;
-                                if (!loaded[indexPosition.x +
-                                            diameter * (indexPosition.y +
-                                                        diameter * indexPosition.z)])
-                                    chunkToLoad_.push_back(centerChunkPosition_ + relativeChunkPosition);
-                            }
-
-                        }
-
             //If there are chunk to load notify the world generator
             if (!chunkToLoad_.empty())
                 worldGenerator_.notify();
-
         }
     }
 
-    void ChunkManager::setRadius(int radius)
-    {
-        radius_ = radius;
-    }
-
-    glm::vec3 ChunkManager::getChunkToLoad()
+    glm::ivec3 ChunkManager::getChunkToLoad()
     {
         if (chunkToLoad_.empty())
             return glm::ivec3(INT_MIN);
@@ -136,12 +74,34 @@ namespace CC
         return chunkPosition;
     }
 
+    void ChunkManager::addChunkToLoad(glm::ivec3 chunkToLoad)
+    {
+        //Add the chunk if isn't already going to be loaded
+        if (std::find(chunkToLoad_.begin(), chunkToLoad_.end(), chunkToLoad) == chunkToLoad_.end())
+            chunkToLoad_.push_back(chunkToLoad);
+    }
+
     void ChunkManager::run()
     {
         while (running_)
         {
             tick();
         }
+    }
+
+    glm::ivec3 *ChunkManager::getTunnelBody() const
+    {
+        return tunnelBody_;
+    }
+
+    int ChunkManager::getTunnelLength() const
+    {
+        return tunnelLength_;
+    }
+
+    const int &ChunkManager::getTunnelRadius() const
+    {
+        return tunnelRadius_;
     }
 
 }

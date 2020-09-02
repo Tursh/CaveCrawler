@@ -25,12 +25,14 @@ namespace CC
     {
         World *world_;
 
+        glm::ivec3 *tunnelBody_;
+
         ChunkManager &chunkManager_;
 
         void run() override;
 
     public:
-        WorldGenerator(World *world, ChunkManager &chunkManager);
+        WorldGenerator(World *world, ChunkManager &chunkManager, glm::ivec3 *tunnelBody);
 
     };
 

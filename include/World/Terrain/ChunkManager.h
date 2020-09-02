@@ -10,14 +10,10 @@
 #include "World/Player.h"
 #include "Chunk.h"
 #include "WorldGenerator.h"
+#include "TunnelGenerator.h"
 
 namespace CC
 {
-
-/*
- * Goal: Render and update only chunks around the player
- * How?: Load chunk that are close enough and unload too far ones
- */
 
     class ChunkManager : public CGE::Utils::ThreadProcess
     {
@@ -26,13 +22,6 @@ namespace CC
 
         std::map<int, std::map<int, std::map<int, Chunk *>>> &chunks_;
 
-        /**
-         * Distance in chunks before the chunk do not need to be loaded
-         */
-        int radius_ = 10;
-
-        bool *loaded;
-
         int chunkCount_;
 
         glm::ivec3 centerChunkPosition_ = glm::ivec3(INT_MAX);
@@ -40,6 +29,14 @@ namespace CC
         std::vector<glm::ivec3> chunkToLoad_;
 
         World *world_;
+
+        TunnelGenerator tunnelGenerator_;
+
+        int tunnelLength_ = 100;
+
+        int tunnelRadius_ = 4;
+
+        glm::ivec3 *tunnelBody_;
 
         WorldGenerator worldGenerator_;
 
@@ -58,16 +55,18 @@ namespace CC
         void tick();
 
         /**
-         * Set the distance in chunks before the chunk do not need to be loaded
-         * @param radius The distance in chunks (block position / 16)
-         */
-        void setRadius(int radius);
-
-        /**
          * Search for a chunk that needs to be loaded and returns it
          * @return A chunk position to load a chunk
          */
-        glm::vec3 getChunkToLoad();
+        glm::ivec3 getChunkToLoad();
+
+        void addChunkToLoad(glm::ivec3 chunkToLoad);
+
+        glm::ivec3 *getTunnelBody() const;
+
+        int getTunnelLength() const;
+
+        const int &getTunnelRadius() const;
 
     };
 

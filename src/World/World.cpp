@@ -163,7 +163,7 @@ namespace CC
 
 
     World::World()
-            : player_(new Entities::Player(nullptr, camera_, {0, 60, 0})),
+            : player_(new Entities::Player(nullptr, camera_, {0, 0, 0})),
               collisionFunction_(std::bind(&checkCollision, std::placeholders::_1, this)),
               chunkManager_(player_, this, chunks_)
     {
@@ -343,19 +343,19 @@ namespace CC
             //X
             if (absSteps.x < absSteps.y && absSteps.x < absSteps.z)
             {
-                rayPosition += rayOrientation * (absSteps.x + (direction.x ? 0 : 0.001f));
+                rayPosition += rayOrientation * (absSteps.x + (direction.x ? 0 : 0.001f)) + (absSteps.x < .0001f ? 0.001f : 0) * (direction.x ? 1 : -1);
                 raySize -= (direction.x) ? 1 : -1 * absSteps.x;
             }
                 //Y
             else if (absSteps.y < absSteps.z)
             {
-                rayPosition += rayOrientation * (absSteps.y + (direction.y ? 0 : 0.0001f));
+                rayPosition += rayOrientation * (absSteps.y + (direction.y ? 0 : 0.0001f)) + (absSteps.y < .0001f ? 0.001f : 0) * (direction.y ? 1 : -1);
                 raySize -= (direction.y) ? 1 : -1 * absSteps.y;
             }
                 //Z
             else
             {
-                rayPosition += rayOrientation * (absSteps.z + (direction.z ? 0 : 0.0001f));
+                rayPosition += rayOrientation * (absSteps.z + (direction.z ? 0 : 0.0001f)) + (absSteps.z < .0001f ? 0.001f : 0) * (direction.z ? 1 : -1);
                 raySize -= absSteps.z;
             }
 
@@ -385,7 +385,11 @@ namespace CC
 
     glm::ivec3 World::getChunkPosition(glm::ivec3 blockPosition)
     {
-        glm::ivec3 chunkPosition = blockPosition / 16;
+        glm::ivec3 negativeBlockPosition = blockPosition;
+        for (int axis = 0; axis < 3; ++axis)
+            negativeBlockPosition[axis] += blockPosition[axis] <= 0 ? 1 : 0;
+
+        glm::ivec3 chunkPosition = negativeBlockPosition / 16;
 
         for (int axis = 0; axis < 3; ++axis)
             chunkPosition[axis] -= blockPosition[axis] < 0 ? 1 : 0;

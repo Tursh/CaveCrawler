@@ -13,12 +13,8 @@
 namespace CC
 {
 
-    const unsigned int MAX_WORLD_GENERATION_HEIGHT = 256;
-    const unsigned int CLOUD_CHUNK_HEIGHT = 8;
-
-
-    WorldGenerator::WorldGenerator(World *world, ChunkManager &chunkManager)
-            : world_(world), chunkManager_(chunkManager) {}
+    WorldGenerator::WorldGenerator(World *world, ChunkManager &chunkManager, glm::ivec3 *tunnelBody)
+            : world_(world), chunkManager_(chunkManager), tunnelBody_(tunnelBody) {}
 
     static void fillChunk(Block *blocks, Block block)
     {
@@ -26,7 +22,7 @@ namespace CC
             blocks[i] = block;
     }
 
-    const unsigned int MID_X = 1 << 6, MID_Y = 1 << 5, MID_Z = 1 << 4, INV = 1 << 7;
+    const unsigned int MID_X = 0b01000000, MID_Y = 0b00100000, MID_Z = 0b00010000, INV = 0b10000000;
 
     void WorldGenerator::run()
     {
@@ -44,6 +40,29 @@ namespace CC
             auto *blocks = new Block[CUBED_CHUNK_SIZE];
             fillChunk(blocks, Blocks::STONE_BLOCK);
 
+            for (int i = 0; i < chunkManager_.getTunnelLength(); ++i)
+            {
+                //Check if the tunnel point is close to the chunk to load
+                if (World::getChunkPosition(tunnelBody_[i]) == chunkPosition)
+                {
+                    glm::ivec3 blockPosition = World::getPositionInChunk(tunnelBody_[i]);
+                    for (int x = -chunkManager_.getTunnelRadius(); x < chunkManager_.getTunnelRadius(); ++x)
+                        for (int y = -chunkManager_.getTunnelRadius(); y < chunkManager_.getTunnelRadius(); ++y)
+                            for (int z = -chunkManager_.getTunnelRadius(); z < chunkManager_.getTunnelRadius(); ++z)
+                            {
+
+                                glm::ivec3 aroundBlockPosition = blockPosition + glm::ivec3(x, y, z);
+                                bool valid = true;
+                                for (int axis = 0; axis < 3; ++axis)
+                                    if (aroundBlockPosition[axis] < 0 || aroundBlockPosition[axis] >= CHUNK_SIZE)
+                                        valid = false;
+
+                                if (valid)
+                                    blocks[aroundBlockPosition.x + aroundBlockPosition.y * CHUNK_SIZE +
+                                           aroundBlockPosition.z * SQUARED_CHUNK_SIZE] = Blocks::AIR_BLOCK;
+                            }
+                }
+            }
 
 
             auto *newChunk = new Chunk(blocks, world_, chunkPosition, false);

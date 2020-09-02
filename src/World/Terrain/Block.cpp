@@ -517,8 +517,8 @@ namespace CC
             unsigned int startTopFaceIndex = meshBuilder.vertexCount();
 
             //TOP
-            if ((neighbors[3 - invY] == nullptr || neighbors[3 - invY]->ID == Blocks::AIR ||
-                 neighbors[3 - invY]->state))
+            if ((neighbors[3 - invY] != nullptr && (neighbors[3 - invY]->ID == Blocks::AIR ||
+                 neighbors[3 - invY]->state)))
             {
                 if (!cornerFlagCount)
                     loadFace(meshBuilder, blockPosition, Face::TOP, topTexCoords);

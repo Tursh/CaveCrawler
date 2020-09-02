@@ -25,11 +25,8 @@ namespace CC
         CGE::GUI::GUIManager::addComponent(pausePanel);
     }
 
-    CC::TunnelGenerator tunnelGenerator(glm::vec3(0));
-
     void PlayState::tick()
     {
-        tunnelGenerator.getNextTunnelHead();
         world.tick();
     }
 
