@@ -8,7 +8,6 @@
 
 namespace CC
 {
-
     PlayState::PlayState()
     {
         CGE::IO::input::setYourOwnKeyCallBack(
