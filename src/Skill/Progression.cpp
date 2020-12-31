@@ -53,6 +53,10 @@ namespace CC
 
 	void Progression::addPointToSkill(Skill skill, int amount)
 	{
+		if (skillPoints_ - amount < 0)
+			throw 1;
+
+		skillPoints_ -= amount;
 		skills_[(int)skill] += amount;
 	}
 
