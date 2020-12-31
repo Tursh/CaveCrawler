@@ -4,6 +4,7 @@
 
 #include <cmath>
 #include "Skill/Progression.h"
+#include <Utils/Log.h>
 
 #define FUNCTION_L 0.2f
 #define FUNCTION_CONSTANT_ADDED 20
@@ -54,7 +55,7 @@ namespace CC
 	void Progression::addPointToSkill(Skill skill, int amount)
 	{
 		if (skillPoints_ - amount < 0)
-			throw 1;
+			logError("Skill points are negative, this is unexpected behaviour and shouldn't happen");
 
 		skillPoints_ -= amount;
 		skills_[(int)skill] += amount;
