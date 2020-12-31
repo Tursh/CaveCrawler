@@ -6,6 +6,9 @@
 
 #include <Entities/Entity.h>
 #include <View/Camera.h>
+#include <Skill/Progression.h>
+#include <Inventory/Inventory.h>
+#include <Inventory/Projectile.h>
 
 namespace CC
 {
@@ -20,6 +23,11 @@ namespace CC::Entities
     class Player : public CGE::Entities::Entity
     {
         CGE::View::Camera &camera_;
+        Progression progression;
+        Inventory inventory;
+		void init();
+		bool Shoot(World *world);
+
     public:
         explicit Player(unsigned int texMeshID, CGE::View::Camera &camera);
 
@@ -37,7 +45,7 @@ namespace CC::Entities
         void hit(World *world);
 
         const glm::vec3 &getSize() override;
-    };
+	};
 
 }
 

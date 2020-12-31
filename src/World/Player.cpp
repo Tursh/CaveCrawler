@@ -17,26 +17,30 @@
 
 #include <glm/gtx/string_cast.hpp>
 
-
 #include "IO/Input.h"
 
 namespace CC::Entities
 {
+
+
     const glm::vec3 PLAYER_SIZE = {0.9f, 1.8f, 0.9f};
 
     const float hitCooldown = 0.5f;
 
     Player::Player(unsigned int texMeshID, CGE::View::Camera &camera)
-            : Entity(texMeshID, glm::vec3(0, 0, 0.1f), glm::vec3(0.7853f * 2, 0, 0)), camera_(camera) {}
+            : Entity(texMeshID, glm::vec3(0, 0, 0.1f), glm::vec3(0.7853f * 2, 0, 0)), camera_(camera) {
+    	init();
+    }
 
     Player::Player(CGE::Loader::TexturedMesh *texMesh, CGE::View::Camera &camera, glm::vec3 position,
                    glm::vec3 rotation)
             : Entity(std::shared_ptr<CGE::Loader::TexturedMesh>(texMesh), position, rotation),
-              camera_(camera) {}
+              camera_(camera) {
+    	init();
+    }
 
     void Player::move(float speed, World *world)
     {
-
         //We start with a 3D vector of (0, 0, 0)
         glm::vec3 relativeForces(0);
 
@@ -112,6 +116,7 @@ namespace CC::Entities
                 hit(world);
                 lastHit = glfwGetTime();
             }
+			Shoot(world);
         }
         else if (CGE::IO::input::isButtonPressed(GLFW_MOUSE_BUTTON_2))
         {
@@ -189,11 +194,29 @@ namespace CC::Entities
             lastHit = 0.0f;
     }
 
-
     void Player::hit(World *world)
     {
         glm::vec3 hitBlockPosition = world->getPickedBlock(6.0f);
-
         world->setBlock(hitBlockPosition, Blocks::AIR_BLOCK);
     }
+
+	void Player::init()
+	{
+
+	}
+
+	bool Player::Shoot(World *world)
+	{
+    	CC::Weapon selectedWeapon = inventory.getToolbar()[inventory.selectedWeapon].value();
+		//TODO fire rate, precision, damage, automatic
+    	if (selectedWeapon.cost_ > inventory[selectedWeapon.elemental_])
+		{
+			selectedWeapon.getSharedProjectile()->setPositions(
+					getPosition(),
+					getRotation(),
+					camera_.getRotationInNormalizedVector() * selectedWeapon.projectileSpeed_);
+			return true;
+		}
+		return false;
+	}
 }

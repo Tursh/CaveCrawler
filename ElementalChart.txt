@@ -10,3 +10,10 @@ Negative numbers heals the target
 | Water         | Strong   | Normal      | Weak   | Normal      |
 | Fire          | Normal   | Strong      | Normal | Weak        |
 | Air           | Weak     | Normal      | Strong | Normal      |
+
+There are different magical weapons
+Hand: low cost, medium speed, slow projectiles.
+Wand: low cost, high speed, semi-auto, ray cast.
+Staff: high cost, explosive, low speed, bolt action, projectile.
+Bracelets: medium cost, medium speed, projectile, semi-auto, speed accelerating.
+Ring: laser, low cost, very high speed, ray cast.

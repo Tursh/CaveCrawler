@@ -4,6 +4,7 @@
 
 #include <IO/Input.h>
 #include <GUI/GUIManager.h>
+#include <glm/gtx/string_cast.hpp>
 #include "States/PlayState.h"
 
 namespace CC
