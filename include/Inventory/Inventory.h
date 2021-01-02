@@ -17,7 +17,7 @@ namespace CC
 
 	public:
 		uint selectedWeapon_;
-		std::array<std::optional<Weapon>, 5> &getToolbar();
+		const std::array<std::optional<Weapon>, 5> &getToolbar();
 		void setWeapon(Weapon weapon, int index);
 		Weapon& getWeapon();
 		Inventory();

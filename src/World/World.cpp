@@ -154,12 +154,12 @@ namespace CC
 
     static glm::vec3 checkCollision(CGE::Entities::Entity *entity, World *world)
     {
-        Physics::Hitbox entityHitbox = entity->getHitbox();
+        Physics::BoxCollider entityHitbox = entity->getHitbox();
         glm::vec3 movement = entity->getSpeed();
 
-        std::vector<Physics::Hitbox> blockHitboxes = world->getBlockHitboxes(entityHitbox.expand(1));
+        std::vector<Physics::BoxCollider> blockHitboxes = world->getBlockHitboxes(entityHitbox.expand(1));
 
-        for (Physics::Hitbox hitbox : blockHitboxes)
+        for (Physics::BoxCollider hitbox : blockHitboxes)
         {
             for (int axis = 0; axis < 3; ++axis)
                 movement[axis] = hitbox.checkIfCollideInAxis(entityHitbox, axis, movement[axis]);
@@ -295,9 +295,9 @@ namespace CC
         newEntity->setCollisionFunc(collisionFunction_);
     }
 
-    std::vector<Physics::Hitbox> World::getBlockHitboxes(Physics::Hitbox area)
+    std::vector<Physics::BoxCollider> World::getBlockHitboxes(Physics::BoxCollider area)
     {
-        std::vector<Physics::Hitbox> hitboxes;
+        std::vector<Physics::BoxCollider> hitboxes;
 
         glm::ivec3 negLimit = glm::floor(area.getNegBorder());
         glm::ivec3 posLimit = glm::floor(area.getPosBorder());

@@ -113,7 +113,7 @@ namespace CC
          * @param area The to check for blocks
          * @return The list of block hitboxe
          */
-        auto getBlockHitboxes(CGE::Physics::Hitbox area) -> std::vector<CGE::Physics::Hitbox>;
+        auto getBlockHitboxes(CGE::Physics::BoxCollider area) -> std::vector<CGE::Physics::BoxCollider>;
 
         void addEntity(std::shared_ptr<CGE::Entities::Entity> newEntity);
 

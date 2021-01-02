@@ -4,25 +4,14 @@
 
 #include <Utils/TimeUtils.h>
 #include <Utils/Log.h>
+#include <utility>
+#include <World/Player.h>
+#include <World/World.h>
 #include "Inventory/Weapon.h"
 
-CC::Weapon::Weapon(
-		CC::Element element, CC::WeaponType weaponType, float precision,
-		float fireRate, float damage, float size, float projectileSpeed,
-		int duration, int cost, bool automatic)
-		: elemental_(element), weaponType_(weaponType), precision_(precision),
-		fireRate_(fireRate), damage_(damage), projectileSpeed_(projectileSpeed),
-		projectileSize_(size),
-		duration_(duration), cost_(cost), automatic_(automatic), timer_(fireRate_)
+CC::Entities::SharedProjectile CC::Weapon::getSharedProjectile() const
 {
-
-}
-
-std::shared_ptr<CC::Entities::Projectile> CC::Weapon::getSharedProjectile() const
-{
-	Entities::Projectile projectile = Entities::Projectile(
-			1, elemental_, false, duration_, damage_, projectileSize_);
-	return std::make_shared<Entities::Projectile>(projectile);
+	return std::make_shared<Entities::Projectile>(Entities::Projectile(projectile_));
 }
 
 bool CC::Weapon::canShoot()
@@ -37,9 +26,23 @@ void CC::Weapon::update()
 	//logInfo(timer_);
 }
 
-void CC::Weapon::shoot()
+CC::Weapon::Weapon(
+		CC::Element element, CC::WeaponType weaponType, float precision, float fireRate, float projectileSpeed,
+		CC::Entities::Projectile projectile, int cost, bool automatic)
+		: elemental_(element), weaponType_(weaponType), precision_(precision), fireRate_(fireRate),
+		projectileSpeed_(projectileSpeed), projectile_(std::move(projectile)), cost_(cost), automatic_(automatic)
+{}
+
+void CC::Weapon::shoot(CC::Entities::Player *player, CC::World *world)
 {
-	timer_ = 0.f;
+	std::uniform_real_distribution<float> distribution(-1.f, 1.f);
+	std::shared_ptr<CC::Entities::Projectile> projectile = getSharedProjectile();
+	projectile->setPositions(
+			((CGE::Entities::Entity*)(player))->getPosition(), ((CGE::Entities::Entity*)(player))->getRotation(),
+			player->getCameraVectorPointing() * projectileSpeed_ +
+			glm::vec3(distribution(random_data),distribution(random_data),distribution(random_data)) * (1/precision_));
+	world->addEntity(projectile);
+	player->inventory[elemental_] -= cost_;
 }
 
 

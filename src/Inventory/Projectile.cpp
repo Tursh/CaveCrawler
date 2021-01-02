@@ -10,11 +10,11 @@ namespace CC::Entities
 {
 	Projectile::Projectile(
 			uint texMeshId, Element element, bool explodes, uint duration, float damage, float size,
-			glm::vec3 position, glm::vec3 rotation,glm::vec3 velocity)
-		:CGE::Entities::Entity(texMeshId, position, rotation),
-		velocity_(velocity), element_(element), explodes_(explodes), duration_(duration), damage_(damage), size_(size)
+			const glm::vec3& position, const glm::vec3& rotation,const glm::vec3& velocity)
+			:CGE::Entities::Entity(texMeshId, position, rotation),
+			velocity_(velocity), element_(element), explodes_(explodes),
+			duration_(duration), damage_(damage), size_(size)//, as_(velocity)
 	{
-		setSpeed(velocity);
 	}
 
 	void Projectile::update()
@@ -55,15 +55,7 @@ namespace CC::Entities
 		duration_--;
 	}
 
-//	TODO copy constructor;
-//	Projectile::Projectile(const Projectile &projectile)
-//	:Entity(projectile.getTexMesh(), projectile.getPosition(), projectile.getRotation(), projectile.isVisible()),
-//	velocity_(projectile.velocity_), element_(projectile.element_), explodes_(projectile.explodes_)
-//	{
-//		setSpeed(projectile.velocity_);
-//	}
-
-	void Projectile::setPositions(glm::vec3 position, glm::vec3 rotation, glm::vec3 velocity)
+	void Projectile::setPositions(const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& velocity)
 	{
 		ap_ = position;
 		op_ = position;
@@ -77,5 +69,12 @@ namespace CC::Entities
 	bool Projectile::shouldDie()
 	{
 		return duration_ < 0;
+	}
+
+	Projectile::Projectile(const Projectile &projectile)
+			:CGE::Entities::Entity(projectile.texMesh_, projectile.getPosition(), projectile.getRotation()),
+			 velocity_(projectile.velocity_), element_(projectile.element_), explodes_(projectile.explodes_),
+			 duration_(projectile.duration_), damage_(projectile.damage_), size_(projectile.size_)
+	{
 	}
 }

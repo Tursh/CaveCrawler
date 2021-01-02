@@ -215,21 +215,18 @@ namespace CC::Entities
 
 	void Player::Shoot(World *world, CC::Weapon &selectedWeapon)
 	{
-    	std::uniform_real_distribution<float> distribution(-1.f, 1.f);
-		std::shared_ptr<CC::Entities::Projectile> projectile = selectedWeapon.getSharedProjectile();
-		projectile->setPositions(
-				getPosition(), getRotation(),
-				camera_.getRotationInNormalizedVector() * selectedWeapon.projectileSpeed_ +
-				glm::vec3(distribution(random_data),distribution(random_data),distribution(random_data))* (1/selectedWeapon.precision_));
-    	world->addEntity(projectile);
-    	selectedWeapon.shoot();
-    	inventory[selectedWeapon.elemental_] -= selectedWeapon.cost_;
+    	selectedWeapon.shoot(this, world);
 	}
 
 	void Player::update()
 	{
 		Entity::update();
 		inventory.update();
+	}
+
+	const glm::vec3 Player::getCameraVectorPointing() const
+	{
+		return camera_.getRotationInNormalizedVector();
 	}
 
 }

@@ -23,12 +23,10 @@ namespace CC::Entities
 
     class Player : public CGE::Entities::Entity
     {
-		//there are clearly better ways to do this
-		std::default_random_engine random_data;
 		bool hasShot;
         CGE::View::Camera &camera_;
         Progression progression;
-        Inventory inventory;
+
 		void init();
 		void Shoot(World *world, CC::Weapon &selectedWeapon);
 
@@ -41,6 +39,8 @@ namespace CC::Entities
 
         void move(float speed, World *terrain);
 
+        const glm::vec3 getCameraVectorPointing() const;
+
         /**
          * Activate all player actions (ex: hit block, open inventory, etc...
          */
@@ -51,6 +51,8 @@ namespace CC::Entities
         const glm::vec3 &getSize() override;
 
         void update() override;
+
+		Inventory inventory;
 	};
 
 }
