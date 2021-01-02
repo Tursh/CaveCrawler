@@ -42,16 +42,22 @@ namespace CC
 		toolbar_[index] = weapon;
 	}
 
-	Weapon& Inventory::getWeapon()
-	{
-		std::optional<CC::Weapon>& selectedWeapon = toolbar_[selectedWeapon_];
-		return selectedWeapon ? selectedWeapon.value() : toolbar_[0].value();
-	}
-
 	void Inventory::update()
 	{
 		for (std::optional<Weapon> &weapon : toolbar_)
 			if (weapon)
 				weapon.value().update();
+	}
+
+	Weapon Inventory::getWeapon() const
+	{
+		std::optional<CC::Weapon> selectedWeapon = toolbar_[selectedWeapon_];
+		return selectedWeapon ? selectedWeapon.value() : toolbar_[0].value();
+	}
+
+	void Inventory::useWeapon(uint index, CC::Entities::Player *player, World *world)
+	{
+		std::optional<CC::Weapon>& selectedWeapon = toolbar_[selectedWeapon_] = toolbar_[index];
+		(selectedWeapon ? selectedWeapon.value() : toolbar_[0].value()).shoot(player, world);
 	}
 }

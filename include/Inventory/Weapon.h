@@ -42,8 +42,7 @@ namespace CC
 				float projectileSpeed_ = 1.f,
 				Entities::Projectile projectile = Entities::Projectile(1),
 				int cost = 0,
-				bool automatic = false);
-		Entities::SharedProjectile getSharedProjectile() const;
+				bool automatic = true);
 		bool canShoot();
 		void update();
 		void shoot(Entities::Player* player, World* world);

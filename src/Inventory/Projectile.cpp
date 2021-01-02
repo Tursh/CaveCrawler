@@ -15,6 +15,7 @@ namespace CC::Entities
 			velocity_(velocity), element_(element), explodes_(explodes),
 			duration_(duration), damage_(damage), size_(size)//, as_(velocity)
 	{
+		setSpeed(velocity);
 	}
 
 	void Projectile::update()

@@ -112,14 +112,14 @@ namespace CC::Entities
 //                hit(world);
 //                lastHit = glfwGetTime();
 //            }
-			CC::Weapon& selectedWeapon = inventory.getWeapon();
+			CC::Weapon selectedWeapon = inventory.getWeapon();
 			if (selectedWeapon.cost_ >= inventory[selectedWeapon.elemental_] && selectedWeapon.canShoot())
 			{
 				if (selectedWeapon.automatic_)
-					Shoot(world, selectedWeapon);
+					inventory.useWeapon(inventory.selectedWeapon_,this, world);
 				else
 					if (!hasShot)
-						Shoot(world,selectedWeapon);
+						inventory.useWeapon(inventory.selectedWeapon_,this, world);
 			}
 			hasShot = true;
         }
@@ -211,11 +211,6 @@ namespace CC::Entities
 
 	void Player::init()
 	{
-	}
-
-	void Player::Shoot(World *world, CC::Weapon &selectedWeapon)
-	{
-    	selectedWeapon.shoot(this, world);
 	}
 
 	void Player::update()

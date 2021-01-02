@@ -154,7 +154,7 @@ namespace CC
 
     static glm::vec3 checkCollision(CGE::Entities::Entity *entity, World *world)
     {
-        Physics::BoxCollider entityHitbox = entity->getHitbox();
+        Physics::BoxCollider entityHitbox = entity->getBoxCollider();
         glm::vec3 movement = entity->getSpeed();
 
         std::vector<Physics::BoxCollider> blockHitboxes = world->getBlockHitboxes(entityHitbox.expand(1));
