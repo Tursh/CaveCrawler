@@ -9,6 +9,7 @@
 #include <Skill/Progression.h>
 #include <Inventory/Inventory.h>
 #include <Inventory/Projectile.h>
+#include <random>
 
 namespace CC
 {
@@ -22,11 +23,14 @@ namespace CC::Entities
 
     class Player : public CGE::Entities::Entity
     {
+		//there are clearly better ways to do this
+		std::default_random_engine random_data;
+		bool hasShot;
         CGE::View::Camera &camera_;
         Progression progression;
         Inventory inventory;
 		void init();
-		bool Shoot(World *world);
+		void Shoot(World *world, CC::Weapon &selectedWeapon);
 
     public:
         explicit Player(unsigned int texMeshID, CGE::View::Camera &camera);
@@ -45,6 +49,8 @@ namespace CC::Entities
         void hit(World *world);
 
         const glm::vec3 &getSize() override;
+
+        void update() override;
 	};
 
 }

@@ -9,7 +9,6 @@
 #include <IO/Window.h>
 #include <Utils/TimeUtils.h>
 #include <GUI/Text/TextRenderer.h>
-#include <Utils/Log.h>
 #include <Inventory/Projectile.h>
 
 using namespace CGE;
@@ -19,14 +18,18 @@ namespace CC
     void World::tick()
     {
         //TODO create a world generator and check when the player move if chunks can be deleted
-
+		//logInfo(CGE::Utils::TPSClock::getDelta());
         player_->move(0.025f, this);
         for (const auto &entity : entities_)
         {
             entity->update();
+            if (entity->shouldDie())
+			{
+				//TODO Dont know how to destroy shared pointers correctly
+			}
         }
+        //logInfo(entities_.size());
 
-        //logInfo(entities_[1]->getPosition().x);
         camera_.followPlayer(player_);
         player_->checkAction(this);
     }
@@ -73,6 +76,9 @@ namespace CC
         GUI::Text::TextRenderer::renderText(glm::to_string(getChunkPosition(camera_.position_)), {-1, 0.85f}, 0.1f,
                                             glm::vec3(1, 1, 1),
                                             false);
+		GUI::Text::TextRenderer::renderText(glm::to_string(camera_.getRotationInNormalizedVector()), {-1, 0.8f}, 0.1f,
+											glm::vec3(1, 1, 1),
+											false);
         deleteBufferedChunks();
     }
 
@@ -287,7 +293,6 @@ namespace CC
     {
         entities_.push_back(newEntity);
         newEntity->setCollisionFunc(collisionFunction_);
-        logInfo("Entity added");
     }
 
     std::vector<Physics::Hitbox> World::getBlockHitboxes(Physics::Hitbox area)

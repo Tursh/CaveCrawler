@@ -12,17 +12,19 @@ namespace CC
 {
 	class Inventory
 	{
-		std::array<std::optional<CC::Weapon>, 5> toolbar_;
+		std::array<std::optional<Weapon>, 5> toolbar_;
 		std::array<int, NUMBER_OF_ELEMENTS> elemental_;
 
 	public:
-		uint selectedWeapon;
-		[[nodiscard]] std::array<std::optional<CC::Weapon>, 5> getToolbar() const;
-		void setWeapon(CC::Weapon weapon, int index);
+		uint selectedWeapon_;
+		std::array<std::optional<Weapon>, 5> &getToolbar();
+		void setWeapon(Weapon weapon, int index);
+		Weapon& getWeapon();
 		Inventory();
 		explicit Inventory(std::array<int,NUMBER_OF_ELEMENTS> elemental);
 		void setElemental(std::array<int,NUMBER_OF_ELEMENTS> elemental);
 		void useSpell(const Spell &spell);
 		int& operator[] (int index);
+		void update();
 	};
 }

@@ -2,30 +2,44 @@
 // Created by musique88 on 12/31/20.
 //
 
+#include <Utils/TimeUtils.h>
+#include <Utils/Log.h>
 #include "Inventory/Weapon.h"
 
 CC::Weapon::Weapon(
 		CC::Element element, CC::WeaponType weaponType, float precision,
-		float fireRate, float damage, float projectileSpeed,
+		float fireRate, float damage, float size, float projectileSpeed,
 		int duration, int cost, bool automatic)
 		: elemental_(element), weaponType_(weaponType), precision_(precision),
 		fireRate_(fireRate), damage_(damage), projectileSpeed_(projectileSpeed),
-		duration_(duration), cost_(cost), automatic_(automatic)
+		projectileSize_(size),
+		duration_(duration), cost_(cost), automatic_(automatic), timer_(fireRate_)
 {
 
 }
 
-std::shared_ptr<CC::Entities::Projectile> CC::Weapon::getSharedProjectile()
+std::shared_ptr<CC::Entities::Projectile> CC::Weapon::getSharedProjectile() const
 {
 	Entities::Projectile projectile = Entities::Projectile(
-			1, elemental_, false, duration_);
+			1, elemental_, false, duration_, damage_, projectileSize_);
+	return std::make_shared<Entities::Projectile>(projectile);
 }
 
-std::array<int, NUMBER_OF_ELEMENTS> CC::Weapon::requirements() const
+bool CC::Weapon::canShoot()
 {
-	std::array<int, NUMBER_OF_ELEMENTS> array = std::array<int, NUMBER_OF_ELEMENTS>();
-	array[elemental_] = cost_;
-	return array;
+	return timer_ > fireRate_;
+}
+
+
+void CC::Weapon::update()
+{
+	timer_ += CGE::Utils::TPSClock::getDelta();
+	//logInfo(timer_);
+}
+
+void CC::Weapon::shoot()
+{
+	timer_ = 0.f;
 }
 
 

@@ -12,6 +12,7 @@ namespace CC
 		toolbar_ = {
 				std::make_optional<CC::Weapon>(CC::Weapon()),
 				std::nullopt,std::nullopt,std::nullopt,std::nullopt };
+		selectedWeapon_= 0;
 		setElemental(elemental);
 	}
 
@@ -35,13 +36,26 @@ namespace CC
 			elemental_[i] -= spell.requirements_[i];
 	}
 
-	std::array<std::optional<CC::Weapon>, 5> Inventory::getToolbar() const
+	std::array<std::optional<Weapon>, 5> &Inventory::getToolbar()
 	{
 		return toolbar_;
 	}
 
-	void Inventory::setWeapon(CC::Weapon weapon, int index)
+	void Inventory::setWeapon(Weapon weapon, int index)
 	{
 		toolbar_[index] = weapon;
+	}
+
+	Weapon& Inventory::getWeapon()
+	{
+		std::optional<CC::Weapon>& selectedWeapon = getToolbar()[selectedWeapon_];
+		return selectedWeapon ? selectedWeapon.value() : getToolbar()[0].value();
+	}
+
+	void Inventory::update()
+	{
+		for (std::optional<Weapon> &weapon : toolbar_)
+			if (weapon)
+				weapon.value().update();
 	}
 }

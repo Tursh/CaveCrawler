@@ -21,8 +21,6 @@
 
 namespace CC::Entities
 {
-
-
     const glm::vec3 PLAYER_SIZE = {0.9f, 1.8f, 0.9f};
 
     const float hitCooldown = 0.5f;
@@ -75,8 +73,6 @@ namespace CC::Entities
 
         }
 
-
-
         //Normalize the relative forces so that the speed is the same in all orientations
         if (!(glm::length(relativeForces) < 0.0001f))
             relativeForces = glm::normalize(relativeForces);
@@ -111,13 +107,26 @@ namespace CC::Entities
     {
         if (CGE::IO::input::isButtonPressed(GLFW_MOUSE_BUTTON_1))
         {
-            if (glfwGetTime() - lastHit > hitCooldown)
-            {
-                hit(world);
-                lastHit = glfwGetTime();
-            }
-			Shoot(world);
+//            if (glfwGetTime() - lastHit > hitCooldown)
+//            {
+//                hit(world);
+//                lastHit = glfwGetTime();
+//            }
+			CC::Weapon& selectedWeapon = inventory.getWeapon();
+			if (selectedWeapon.cost_ >= inventory[selectedWeapon.elemental_] && selectedWeapon.canShoot())
+			{
+				if (selectedWeapon.automatic_)
+					Shoot(world, selectedWeapon);
+				else
+					if (!hasShot)
+						Shoot(world,selectedWeapon);
+			}
+			hasShot = true;
         }
+        else if (!CGE::IO::input::isButtonPressed(GLFW_MOUSE_BUTTON_1))
+		{
+        	hasShot = false;
+		}
         else if (CGE::IO::input::isButtonPressed(GLFW_MOUSE_BUTTON_2))
         {
             if (glfwGetTime() - lastHit > hitCooldown)
@@ -202,21 +211,25 @@ namespace CC::Entities
 
 	void Player::init()
 	{
-
 	}
 
-	bool Player::Shoot(World *world)
+	void Player::Shoot(World *world, CC::Weapon &selectedWeapon)
 	{
-    	CC::Weapon selectedWeapon = inventory.getToolbar()[inventory.selectedWeapon].value();
-		//TODO fire rate, precision, damage, automatic
-    	if (selectedWeapon.cost_ > inventory[selectedWeapon.elemental_])
-		{
-			selectedWeapon.getSharedProjectile()->setPositions(
-					getPosition(),
-					getRotation(),
-					camera_.getRotationInNormalizedVector() * selectedWeapon.projectileSpeed_);
-			return true;
-		}
-		return false;
+    	std::uniform_real_distribution<float> distribution(-1.f, 1.f);
+		std::shared_ptr<CC::Entities::Projectile> projectile = selectedWeapon.getSharedProjectile();
+		projectile->setPositions(
+				getPosition(), getRotation(),
+				camera_.getRotationInNormalizedVector() * selectedWeapon.projectileSpeed_ +
+				glm::vec3(distribution(random_data),distribution(random_data),distribution(random_data))* (1/selectedWeapon.precision_));
+    	world->addEntity(projectile);
+    	selectedWeapon.shoot();
+    	inventory[selectedWeapon.elemental_] -= selectedWeapon.cost_;
 	}
+
+	void Player::update()
+	{
+		Entity::update();
+		inventory.update();
+	}
+
 }

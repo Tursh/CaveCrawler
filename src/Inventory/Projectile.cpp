@@ -2,15 +2,17 @@
 // Created by musique88 on 12/30/20.
 //
 
+#include <Utils/Log.h>
+#include <glm/gtx/string_cast.hpp>
 #include "Inventory/Projectile.h"
 
 namespace CC::Entities
 {
 	Projectile::Projectile(
-			uint texMeshId, Element element, bool explodes, uint duration,
+			uint texMeshId, Element element, bool explodes, uint duration, float damage, float size,
 			glm::vec3 position, glm::vec3 rotation,glm::vec3 velocity)
 		:CGE::Entities::Entity(texMeshId, position, rotation),
-		velocity_(velocity), element_(element), explodes_(explodes), duration_(duration)
+		velocity_(velocity), element_(element), explodes_(explodes), duration_(duration), damage_(damage), size_(size)
 	{
 		setSpeed(velocity);
 	}
@@ -53,12 +55,13 @@ namespace CC::Entities
 		duration_--;
 	}
 
-	Projectile::Projectile(const Projectile &projectile)
-	:Entity(projectile.getTexMesh(), projectile.getPosition(), projectile.getRotation(), projectile.isVisible()),
-	velocity_(projectile.velocity_), element_(projectile.element_), explodes_(projectile.explodes_)
-	{
-		setSpeed(projectile.velocity_);
-	}
+//	TODO copy constructor;
+//	Projectile::Projectile(const Projectile &projectile)
+//	:Entity(projectile.getTexMesh(), projectile.getPosition(), projectile.getRotation(), projectile.isVisible()),
+//	velocity_(projectile.velocity_), element_(projectile.element_), explodes_(projectile.explodes_)
+//	{
+//		setSpeed(projectile.velocity_);
+//	}
 
 	void Projectile::setPositions(glm::vec3 position, glm::vec3 rotation, glm::vec3 velocity)
 	{
@@ -68,6 +71,7 @@ namespace CC::Entities
 		or_ = rotation;
 		velocity_ = velocity;
 		setSpeed(velocity);
+		logInfo(glm::to_string(velocity_));
 	}
 
 	bool Projectile::shouldDie()
