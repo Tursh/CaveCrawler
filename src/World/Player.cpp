@@ -113,7 +113,7 @@ namespace CC::Entities
 //                lastHit = glfwGetTime();
 //            }
 			CC::Weapon selectedWeapon = inventory.getWeapon();
-			if (selectedWeapon.cost_ >= inventory[selectedWeapon.elemental_] && selectedWeapon.canShoot())
+			if (selectedWeapon.cost_ <= inventory[selectedWeapon.elemental_] && selectedWeapon.canShoot())
 			{
 				if (selectedWeapon.automatic_)
 					inventory.useWeapon(inventory.selectedWeapon_,this, world);
