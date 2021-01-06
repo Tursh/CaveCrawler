@@ -9,22 +9,27 @@
 #include <IO/Window.h>
 #include <Utils/TimeUtils.h>
 #include <GUI/Text/TextRenderer.h>
-#include <Utils/Log.h>
+#include <Inventory/Projectile.h>
 
 using namespace CGE;
 
 namespace CC
 {
-
     void World::tick()
     {
         //TODO create a world generator and check when the player move if chunks can be deleted
-
+		//logInfo(CGE::Utils::TPSClock::getDelta());
         player_->move(0.025f, this);
         for (const auto &entity : entities_)
         {
             entity->update();
+            if (entity->shouldDie())
+			{
+				//TODO Dont know how to destroy shared pointers correctly
+			}
         }
+        //logInfo(entities_.size());
+
         camera_.followPlayer(player_);
         player_->checkAction(this);
     }
@@ -71,6 +76,9 @@ namespace CC
         GUI::Text::TextRenderer::renderText(glm::to_string(getChunkPosition(camera_.position_)), {-1, 0.85f}, 0.1f,
                                             glm::vec3(1, 1, 1),
                                             false);
+		GUI::Text::TextRenderer::renderText(glm::to_string(camera_.getRotationInNormalizedVector()), {-1, 0.8f}, 0.1f,
+											glm::vec3(1, 1, 1),
+											false);
         deleteBufferedChunks();
     }
 
@@ -146,12 +154,12 @@ namespace CC
 
     static glm::vec3 checkCollision(CGE::Entities::Entity *entity, World *world)
     {
-        Physics::Hitbox entityHitbox = entity->getHitbox();
+        Physics::BoxCollider entityHitbox = entity->getBoxCollider();
         glm::vec3 movement = entity->getSpeed();
 
-        std::vector<Physics::Hitbox> blockHitboxes = world->getBlockHitboxes(entityHitbox.expand(1));
+        std::vector<Physics::BoxCollider> blockHitboxes = world->getBlockHitboxes(entityHitbox.expand(1));
 
-        for (Physics::Hitbox hitbox : blockHitboxes)
+        for (Physics::BoxCollider hitbox : blockHitboxes)
         {
             for (int axis = 0; axis < 3; ++axis)
                 movement[axis] = hitbox.checkIfCollideInAxis(entityHitbox, axis, movement[axis]);
@@ -167,7 +175,9 @@ namespace CC
               collisionFunction_(std::bind(&checkCollision, std::placeholders::_1, this)),
               chunkManager_(player_, this, chunks_)
     {
-        addEntity(std::shared_ptr<CGE::Entities::Entity>(player_));
+    	addEntity(std::shared_ptr<CGE::Entities::Entity>(player_));
+    	//CC::Entities::Projectile projectile(100);
+    	//addEntity(std::make_shared<CC::Entities::Projectile>(projectile));
 
 /*
     Block *blocks = new Block[(int) pow(CHUNK_SIZE, 3)];
@@ -285,9 +295,9 @@ namespace CC
         newEntity->setCollisionFunc(collisionFunction_);
     }
 
-    std::vector<Physics::Hitbox> World::getBlockHitboxes(Physics::Hitbox area)
+    std::vector<Physics::BoxCollider> World::getBlockHitboxes(Physics::BoxCollider area)
     {
-        std::vector<Physics::Hitbox> hitboxes;
+        std::vector<Physics::BoxCollider> hitboxes;
 
         glm::ivec3 negLimit = glm::floor(area.getNegBorder());
         glm::ivec3 posLimit = glm::floor(area.getPosBorder());

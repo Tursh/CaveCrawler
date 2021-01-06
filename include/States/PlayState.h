@@ -9,6 +9,8 @@
 #include <World/World.h>
 #include <GUI/Panel.h>
 #include <GLFW/glfw3.h>
+#include <Inventory/Projectile.h>
+
 
 namespace CC
 {

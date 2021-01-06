@@ -17,7 +17,7 @@ namespace CC
 
 // The function to get the needed xp for the next level is as follows:
 // f(level) = (level * l)^2
-	const int Progression::neededXpFunction(int level)
+	int Progression::neededXpFunction(int level)
 	{
 		return std::floor((level * FUNCTION_L)*(level * FUNCTION_L)) + FUNCTION_CONSTANT_ADDED;
 	}

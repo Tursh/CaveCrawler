@@ -35,7 +35,7 @@ namespace CC
 	public:
 		void resetSkills();
 		int getLevel() const;
-		static const int neededXpFunction(int level);
+		static int neededXpFunction(int level);
 		int neededXpToLevelUp() const;
 		bool addXp(int xp);
 		void addSkillPoints(int amount);

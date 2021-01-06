@@ -111,9 +111,9 @@ namespace CC
         /**
          * Return the list of hitbox in an area
          * @param area The to check for blocks
-         * @return The list of block hitboxe
+         * @return The list of block hitbox
          */
-        auto getBlockHitboxes(CGE::Physics::Hitbox area) -> std::vector<CGE::Physics::Hitbox>;
+        auto getBlockHitboxes(CGE::Physics::BoxCollider area) -> std::vector<CGE::Physics::BoxCollider>;
 
         void addEntity(std::shared_ptr<CGE::Entities::Entity> newEntity);
 

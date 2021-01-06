@@ -17,7 +17,6 @@
 
 #include <glm/gtx/string_cast.hpp>
 
-
 #include "IO/Input.h"
 
 namespace CC::Entities
@@ -27,16 +26,19 @@ namespace CC::Entities
     const float hitCooldown = 0.5f;
 
     Player::Player(unsigned int texMeshID, CGE::View::Camera &camera)
-            : Entity(texMeshID, glm::vec3(0, 0, 0.1f), glm::vec3(0.7853f * 2, 0, 0)), camera_(camera) {}
+            : Entity(texMeshID, glm::vec3(0, 0, 0.1f), glm::vec3(0.7853f * 2, 0, 0)), camera_(camera) {
+    	init();
+    }
 
     Player::Player(CGE::Loader::TexturedMesh *texMesh, CGE::View::Camera &camera, glm::vec3 position,
                    glm::vec3 rotation)
             : Entity(std::shared_ptr<CGE::Loader::TexturedMesh>(texMesh), position, rotation),
-              camera_(camera) {}
+              camera_(camera) {
+    	init();
+    }
 
     void Player::move(float speed, World *world)
     {
-
         //We start with a 3D vector of (0, 0, 0)
         glm::vec3 relativeForces(0);
 
@@ -70,8 +72,6 @@ namespace CC::Entities
             //}
 
         }
-
-
 
         //Normalize the relative forces so that the speed is the same in all orientations
         if (!(glm::length(relativeForces) < 0.0001f))
@@ -107,12 +107,26 @@ namespace CC::Entities
     {
         if (CGE::IO::input::isButtonPressed(GLFW_MOUSE_BUTTON_1))
         {
-            if (glfwGetTime() - lastHit > hitCooldown)
-            {
-                hit(world);
-                lastHit = glfwGetTime();
-            }
+//            if (glfwGetTime() - lastHit > hitCooldown)
+//            {
+//                hit(world);
+//                lastHit = glfwGetTime();
+//            }
+			CC::Weapon selectedWeapon = inventory.getWeapon();
+			if (selectedWeapon.cost_ <= inventory[selectedWeapon.elemental_] && selectedWeapon.canShoot())
+			{
+				if (selectedWeapon.automatic_)
+					inventory.useWeapon(inventory.selectedWeapon_,this, world);
+				else
+					if (!hasShot)
+						inventory.useWeapon(inventory.selectedWeapon_,this, world);
+			}
+			hasShot = true;
         }
+        else if (!CGE::IO::input::isButtonPressed(GLFW_MOUSE_BUTTON_1))
+		{
+        	hasShot = false;
+		}
         else if (CGE::IO::input::isButtonPressed(GLFW_MOUSE_BUTTON_2))
         {
             if (glfwGetTime() - lastHit > hitCooldown)
@@ -189,11 +203,25 @@ namespace CC::Entities
             lastHit = 0.0f;
     }
 
-
     void Player::hit(World *world)
     {
         glm::vec3 hitBlockPosition = world->getPickedBlock(6.0f);
-
         world->setBlock(hitBlockPosition, Blocks::AIR_BLOCK);
     }
+
+	void Player::init()
+	{
+	}
+
+	void Player::update()
+	{
+		Entity::update();
+		inventory.update();
+	}
+
+	const glm::vec3 Player::getCameraVectorPointing() const
+	{
+		return camera_.getRotationInNormalizedVector();
+	}
+
 }

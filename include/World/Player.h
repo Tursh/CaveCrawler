@@ -6,6 +6,10 @@
 
 #include <Entities/Entity.h>
 #include <View/Camera.h>
+#include <Skill/Progression.h>
+#include <Inventory/Inventory.h>
+#include <Inventory/Projectile.h>
+#include <random>
 
 namespace CC
 {
@@ -19,7 +23,13 @@ namespace CC::Entities
 
     class Player : public CGE::Entities::Entity
     {
+		bool hasShot;
         CGE::View::Camera &camera_;
+        Progression progression;
+
+		void init();
+		void Shoot(World *world, CC::Weapon &selectedWeapon);
+
     public:
         explicit Player(unsigned int texMeshID, CGE::View::Camera &camera);
 
@@ -29,6 +39,8 @@ namespace CC::Entities
 
         void move(float speed, World *terrain);
 
+        const glm::vec3 getCameraVectorPointing() const;
+
         /**
          * Activate all player actions (ex: hit block, open inventory, etc...
          */
@@ -37,7 +49,11 @@ namespace CC::Entities
         void hit(World *world);
 
         const glm::vec3 &getSize() override;
-    };
+
+        void update() override;
+
+		Inventory inventory;
+	};
 
 }
 
